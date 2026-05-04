@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Unit Locations Map</title>
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+          integrity="sha384-AHhmp36MxTYxqK8q9BF7ifcAjDEpcCT+OOmZrBb8vBP6At1I/htDyRK/M8wgzuqx"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css"
+          integrity="sha384-PPIZEGYM1v8zp5Py7UjFb79S58UeqCL9pYVnVPURKEqvioPROaVAJKKLzvH2rDnI"
+          crossorigin="anonymous" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"
+          integrity="sha384-BTIWC/F2/I+C/O+ojS/83R360V1iJjuVMMx7RKE9ngqKkXUNVbWv/izbGgjTgbuA"
+          crossorigin="anonymous" />
+
+    <style>
+        html, body { width: 100%; height: 100%; margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; left: 0; right: 0; }
+        .leaflet-container { font-size: 1rem; }
+        .geo-center-icon { font-size: 20px; font-weight: bold; color: #000; text-align: center; }
+    </style>
+
+    <script>
+        L_NO_TOUCH = false;
+        L_DISABLE_3D = false;
+    </script>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"
+            integrity="sha384-p96PkhiqMxDcor51hgckjZOJvsNNKl4Uy25L8da4p+suI14Ftn3sOuFs+IPN4vFm"
+            crossorigin="anonymous"></script>
+
+    <script>
+        const map = L.map("map", {
+            center: [40.928139759838714, -74.65889759596776],
+            zoom: 10,
+            zoomControl: true,
+            preferCanvas: false,
+        });
+
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            minZoom: 0,
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            subdomains: "abc",
+        }).addTo(map);
+
+        // Marker data: c=coords [lat,lng], k=color, p=popup HTML
+        const markers = [
+  {c:[40.7853137,-74.7805949],k:"blue",p:`Crew 0136, Zion Lutheran Church<br>Long Valley, NJ`},
+  {c:[41.156478,-74.7792533],k:"green",p:`Pack 0025, Frankford Township Volunteer Fire Department (F)<br>Branchville, NJ`},
+  {c:[40.8712058,-74.6076601],k:"green",p:`Pack 0045, Mine Hill Educational Foundation (F)<br>Mine Hill, NJ`},
+  {c:[41.0275959,-74.4926711],k:"green",p:`Pack 0049, American Legion Post 423 (F)<br>Oak Ridge, NJ`},
+  {c:[40.8665628,-74.5650224],k:"green",p:`Pack 0050, Fernbrook School (F)<br>Randolph, NJ`},
+  {c:[40.8279662,-74.5494865],k:"green",p:`Pack 0053, Shongum Mt Volunteer Fire Assoc (B)<br>Randolph, NJ`},
+  {c:[40.8681255,-74.6371619],k:"green",p:`Pack 0054, Roxbury Rotary Club (F)<br>Succasunna, NJ`},
+  {c:[41.0838814,-74.8238852],k:"green",p:`Pack 0083, Fairview Lake YMCA (F)<br>Newton, NJ`},
+  {c:[41.2101501,-74.608919],k:"green",p:`Pack 0084, Sussex Kiwanis (F)<br>Sussex, NJ`},
+  {c:[41.0453414,-74.7639275],k:"green",p:`Pack 0085, Lakeland Emergency Squad Inc (F)<br>Newton, NJ`},
+  {c:[40.9218722,-74.6673211],k:"green",p:`Pack 0088, Defiance Engine Company # 3 (F)<br>Hopatcong, NJ`},
+  {c:[41.1176296,-74.5826301],k:"green",p:`Pack 0090, American Legion Post 132 (F)<br>Franklin, NJ`},
+  {c:[40.8269833,-74.6166073],k:"green",p:`Pack 0109, St Matthew the Apostle Parish (F)<br>Randolph, NJ`},
+  {c:[40.9716606,-74.5897979],k:"green",p:`Pack 0111, Jefferson Fire Co #2 (F)<br>Lake Hopatcong, NJ`},
+  {c:[40.7853136,-74.7805949],k:"green",p:`Pack 0136, Zion Lutheran Church of Long Valley (F)<br>Long Valley, NJ`},
+  {c:[41.0400255,-74.6431343],k:"green",p:`Pack 0150, Kiwanis Club of Sparta (F)<br>Sparta, NJ`},
+  {c:[40.9045701,-74.7095418],k:"green",p:`Pack 0151, First Presbyterian Church Stanhope (F)<br>Stanhope, NJ`},
+  {c:[40.8481895,-74.7229162],k:"green",p:`Pack 0156, Flanders Fire Company #1 (F)<br>Flanders, NJ`},
+  {c:[40.8496034,-74.6575843],k:"green",p:`Pack 0159, Redeemer Lutheran Church (F)<br>Succasunna, NJ`},
+  {c:[40.8448394,-74.5709196],k:"green",p:`Pack 0166, Kiwanis Club of Randolph (F)<br>Randolph, NJ`},
+  {c:[41.0405963,-74.7345527],k:"green",p:`Pack 0181, Lt Charles A Meyer American Legion Post 86 (F)<br>Newton, NJ`},
+  {c:[41.2234459,-74.5248718],k:"green",p:`Pack 0183, Vernon Emergency Medical Services Inc. (F)<br>Highland Lakes, NJ`},
+  {c:[40.8688449,-74.7325895],k:"green",p:`Pack 0249, St Jude Roman Catholic Church (F)<br>Budd Lake, NJ`},
+  {c:[40.937312,-74.703539],k:"green",p:`Pack 0276, Lakeland Emergency Squad Inc (F)<br>Byram, NJ`},
+  {c:[41.0007399,-74.6535021],k:"green",p:`Pack 0295, Saint Kateri Tekakwitha Roman Catholic Parish (F)<br>Sparta, NJ`},
+  {c:[40.7863895,-74.6912159],k:"green",p:`Pack 0316, Community Presbyterian Church (B)<br>Chester, NJ`},
+  {c:[40.8449619,-74.6964077],k:"green",p:`Pack 0747, St. Elizabeth Ann Seton Parish (B)<br>Flanders, NJ`},
+  {c:[40.8629852,-74.6469051],k:"green",p:`Pack 1229, All Saints Episcopal Church-Millington (F)<br>Succasunna, NJ`},
+  {c:[40.948354,-74.732758],k:"purple",p:`Ship 1510, USCG Auxiliary Flotilla 15-10, Northern Lakes<br>Hopatcong, NJ`},
+  {c:[40.78672831,-74.69267425],k:"red",p:`Troop 0009, Bernays Apgar and Larry Maysey American Legion Post 342 (B)<br>Chester, NJ`},
+  {c:[40.7889144,-74.7550735],k:"red",p:`Troop 0036, Long Valley Presbyterian Church (B)<br>Long Valley, NJ`},
+  {c:[41.0210399,-74.5188258],k:"red",p:`Troop 0049, American Legion Post 423 (B)<br>Oak Ridge, NJ`},
+  {c:[40.8666359,-74.5649539],k:"red",p:`Troop 0050, Veterans Of Foreign Wars Randolph Memorial Post #7 (B)<br>Randolph, NJ`},
+  {c:[40.8333288,-74.5737051],k:"red",p:`Troop 0053, Shongum Mt Volunteer Fire Assoc (B)<br>Randolph, NJ`},
+  {c:[40.8680811,-74.6371549],k:"red",p:`Troop 0054, Roxbury Rotary Club (B)<br>Succasunna, NJ`},
+  {c:[40.8983113,-74.5805226],k:"red",p:`Troop 0067, Wharton United Community Church at St John's (B)<br>Wharton, NJ`},
+  {c:[41.0405963,-74.7345527],k:"red",p:`Troop 0085, Lt Charles A Meyer American Legion Post 86 (B)<br>Newton, NJ`},
+  {c:[40.9425947,-74.6576091],k:"red",p:`Troop 0088, Defiance Engine Company # 3 (B)<br>Hopatcong, NJ`},
+  {c:[41.1116775,-74.5877287],k:"red",p:`Troop 0090, American Legion Post 132 (B)<br>Franklin, NJ`},
+  {c:[40.9075671,-74.7089734],k:"red",p:`Troop 0091, Musconetcong American Legion Post 278 (B)<br>Stanhope, NJ`},
+  {c:[41.0392638,-74.8087781],k:"red",p:`Troop 0092, Fredon Volunteer Fire Company Inc (B)<br>Fredon, NJ`},
+  {c:[41.021862,-74.640483],k:"red",p:`Troop 0095, Veterans Of Foreign Wars Sparta Nj Post #7248 (B)<br>Sparta, NJ`},
+  {c:[40.8270836,-74.6166077],k:"red",p:`Troop 0109, St Matthew the Apostle Parish (B)<br>Randolph, NJ`},
+  {c:[40.9528791,-74.6137841],k:"red",p:`Troop 0111, American Legion Post 245 (B)<br>Lake Hopatcong, NJ`},
+  {c:[40.78615,-74.6913177],k:"red",p:`Troop 0139, Community Presbyterian Church (B)<br>Chester, NJ`},
+  {c:[41.0400255,-74.6431343],k:"red",p:`Troop 0150, Kiwanis Club of Sparta (B)<br>Sparta, NJ`},
+  {c:[40.8265495,-74.7029953],k:"red",p:`Troop 0156, Flanders Fire Company #1 (B)<br>Flanders, NJ`},
+  {c:[40.8496034,-74.6575843],k:"red",p:`Troop 0159, Redeemer Lutheran Church (B)<br>Succasunna, NJ`},
+  {c:[40.8637362,-74.5572095],k:"red",p:`Troop 0166, Kiwanis Club of Randolph (B)<br>Randolph, NJ`},
+  {c:[40.913621,-74.6368098],k:"red",p:`Troop 0188, Mt Arlington Fire and Rescue (B)<br>Mt. Arlington, NJ`},
+  {c:[40.9558954,-74.6626603],k:"red",p:`Troop 0191, Northwood Engine Company No. 02 (B)<br>Hopatcong, NJ`},
+  {c:[40.8254017,-74.797934],k:"red",p:`Troop 0236, St Mark the Evangelist Church (B)<br>Long Valley, NJ`},
+  {c:[40.8688449,-74.7325895],k:"red",p:`Troop 0249, St Jude Roman Catholic Church (B)<br>Budd Lake, NJ`},
+  {c:[40.868714,-74.732805],k:"red",p:`Troop 0249, St Jude Roman Catholic Church (G)<br>Budd Lake, NJ`},
+  {c:[40.937312,-74.703539],k:"red",p:`Troop 0276, Lakeland Emergency Squad Inc (B)<br>Stanhope, NJ`},
+  {c:[41.2093111,-74.5127744],k:"red",p:`Troop 0283, Saint Francis de Sales (B)<br>Vernon, NJ`},
+  {c:[40.7889144,-74.7550735],k:"red",p:`Troop 0336, Long Valley Presbyterian Church (G)<br>Long Valley, NJ`},
+  {c:[40.70704,-74.5492148],k:"red",p:`Troop 0351, Basking Ridge Presbyterian Church (B)<br>Basking Ridge, NJ`},
+  {c:[41.1958204,-74.4935913],k:"red",p:`Troop 0404, Vernon Twp Fire Dept Co No 1 (B)<br>Vernon, NJ`},
+  {c:[40.7671151,-74.8052782],k:"red",p:`Troop 0436, Saint Luke Parish (B)<br>Long Valley, NJ`},
+  {c:[40.8270836,-74.6166077],k:"red",p:`Troop 0901, St Matthew the Apostle Parish (G)<br>Randolph, NJ`},
+  {c:[41.0400255,-74.6431343],k:"red",p:`Troop 1150, Kiwanis Club of Sparta (G)<br>Sparta, NJ`}
+        ];
+
+        for (const m of markers) {
+            L.marker(m.c, {
+                icon: L.AwesomeMarkers.icon({
+                    markerColor: m.k,
+                    iconColor: "white",
+                    icon: "info-circle",
+                    prefix: "fa",
+                }),
+            })
+                .bindPopup(L.popup({ maxWidth: "100%" }).setContent(m.p))
+                .addTo(map);
+        }
+
+        // Computed centers (display only)
+        L.circleMarker([40.9007, -74.6619], {
+            radius: 10,
+            color: "red",
+            fillColor: "red",
+            fillOpacity: 0.6,
+        })
+            .bindPopup("Weighted Center of Units")
+            .addTo(map);
+
+        L.marker([40.9530, -74.6764], {
+            icon: L.divIcon({
+                className: "geo-center-icon",
+                html: "<div>+</div>",
+                iconSize: [20, 20],
+            }),
+        })
+            .bindPopup("Geographic Center (Bounding Box)")
+            .addTo(map);
+    </script>
+</body>
+</html>
